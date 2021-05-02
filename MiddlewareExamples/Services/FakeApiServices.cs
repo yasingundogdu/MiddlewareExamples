@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MiddlewareExamples.Services
 {
-    public class FakeApiServices
+    public class FakeApiServices : IFakeApiServices
     {
         public string Authentication(string user, string password)
         {
-            if (user == "user" && password == "password")
+            if (user.Equals("user") && password.Equals("password"))
                 return Guid.NewGuid().ToString();
-            return null;
             
+            return String.Empty;
         }
     }
 }

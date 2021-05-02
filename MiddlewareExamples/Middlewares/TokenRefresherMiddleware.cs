@@ -9,26 +9,24 @@ namespace MiddlewareExamples.Middlewares
     public class TokenRefresherMiddleware
     {
         private readonly RequestDelegate _nextMiddleWare;
-        private readonly FakeApiServices _fakeApiServices;
-        private readonly SessionManager _sessionManager;
+        private readonly IFakeApiServices _fakeApiServices;
+        private readonly ITokenManager _tokenManager;
 
-        public TokenRefresherMiddleware(RequestDelegate next, FakeApiServices fakeApiServices, SessionManager sessionManager)
+        public TokenRefresherMiddleware(RequestDelegate next, IFakeApiServices fakeApiServices, ITokenManager tokenManager)
         {
             _nextMiddleWare = next;
             _fakeApiServices = fakeApiServices;
-            _sessionManager = sessionManager;
+            _tokenManager = tokenManager;
         }
 
         public async Task Invoke(HttpContext context)
         {
-            if (_sessionManager.Token == null || _sessionManager.Token == "")
+            if (String.IsNullOrEmpty(_tokenManager.GetToken()))
             {
                 string response = _fakeApiServices.Authentication("user", "password");
 
-                if (response != null)
-                {
-                    _sessionManager.Token = response;
-                }
+                if (!String.IsNullOrEmpty(response)) 
+                    _tokenManager.SetToken(response);
             }
 
             await _nextMiddleWare(context);

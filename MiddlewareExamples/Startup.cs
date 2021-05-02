@@ -34,8 +34,8 @@ namespace MiddlewareExamples
 
             services.AddHttpContextAccessor();
 
-            services.AddSingleton<SessionManager>();
-            services.AddSingleton<FakeApiServices>();
+            services.AddSingleton<ITokenManager, TokenManager>();
+            services.AddSingleton<IFakeApiServices, FakeApiServices>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

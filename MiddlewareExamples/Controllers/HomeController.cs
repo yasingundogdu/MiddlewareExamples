@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using MiddlewareExamples.Helpers.SessionHelper;
 using MiddlewareExamples.Models;
 using System;
 using System.Collections.Generic;
@@ -11,11 +12,13 @@ namespace MiddlewareExamples.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ITokenManager _tokenManager;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ITokenManager tokenManager)
         {
             _logger = logger;
+            _tokenManager = tokenManager;
         }
 
         public IActionResult Index()
@@ -25,6 +28,7 @@ namespace MiddlewareExamples.Controllers
 
         public IActionResult Privacy()
         {
+            ViewData["Token"] = _tokenManager.GetToken();
             return View();
         }
 
